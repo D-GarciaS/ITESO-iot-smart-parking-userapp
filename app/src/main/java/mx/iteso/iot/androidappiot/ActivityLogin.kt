@@ -270,25 +270,23 @@ class ActivityLogin : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 val call = authAPI.auth(Credentials.basic(mEmail,mPassword))
                 try {
                     res = call.execute();
-                }catch (e: Exception) {}
-
-                Log.d("Response",res.toString())
-                if(res != null && res.isSuccessful) {
-                    Log.d("Response Body", res.body().toString())
-                    return true;
+                    if(res.isSuccessful) {
+                        Log.d("Response Body", res.body().toString())
+                        return true;
+                    }
+                    else {
+                        Snackbar.make(email_login_form, "Usuario y contraseña erroneos", Snackbar.LENGTH_LONG).show();
+                        return false
+                    }
+                }catch (e: Exception) {
+                    return true
                 }
-                else if (res != null){
-                    Snackbar.make(email_login_form, "Usuario y contraseña erroneos", Snackbar.LENGTH_LONG).show();
-                    return false
-                }else{
-                    Snackbar.make(email_login_form, "Comprueba tu internet", Snackbar.LENGTH_LONG).show();
 
-                    return false
-                }
             } catch (e: InterruptedException) {
+                Toast.makeText(applicationContext,"0",Toast.LENGTH_SHORT).show()
                 return false
             }
-
+            return false;
         }
 
         override fun onPostExecute(success: Boolean?) {
